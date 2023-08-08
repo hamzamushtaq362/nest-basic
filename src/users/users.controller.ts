@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, NotFoundException, Param, ParseIntPipe, Post, Put, Query, ValidationPipe, UseGuards, SetMetadata } from '@nestjs/common';
+import { Body, Controller, Delete, Get, NotFoundException, Param, ParseIntPipe, Post, Put, Query, ValidationPipe, UseGuards, SetMetadata, UnauthorizedException } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { UsersService } from './users.service';
@@ -22,9 +22,14 @@ export class UsersController {
   //     return ['P1', 'P2', {type}];
   //   }
 
+  // @Get()
+  // getUsers(@Query("type") type: 'junior' | 'senior') {
+  //   return this.userService.getUsers(type);
+  // }
+
   @Get()
-  getUsers(@Query("type") type: 'junior' | 'senior') {
-    return this.userService.getUsers(type);
+  getUsers() {
+    return this.userService.findAll();
   }
 
   // @Get(':id')
@@ -36,10 +41,19 @@ export class UsersController {
   //   }
   // }
 
+  // @Get(':id')
+  // getSingleUser(@Param('id', ParseIntPipe) id: number) {
+  //   try{
+  //     return this.userService.getUser(id);
+  //   } catch(err){
+  //     throw new NotFoundException();
+  //   }
+  // }
+
   @Get(':id')
-  getSingleUser(@Param('id', ParseIntPipe) id: number) {
+  getSingleUser(@Param('id') id: string) {
     try{
-      return this.userService.getUser(id);
+      return this.userService.getUserM(id);
     } catch(err){
       throw new NotFoundException();
     }
@@ -49,7 +63,11 @@ export class UsersController {
   @Post()
   @Roles(Role.Admin)
   createUser(@Body(new ValidationPipe()) createUserDto: CreateUserDto) {
-    return this.userService.createUser(createUserDto);
+    try{
+    return this.userService.create(createUserDto);
+    }catch(err){
+      throw new UnauthorizedException()
+    };
   }
 
   // Put

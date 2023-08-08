@@ -11,6 +11,7 @@ export class AdminGuard implements CanActivate {
   ): boolean | Promise<boolean> | Observable<boolean> {
 
     const roles = this.reflector.get<string[]>('roles', context.getHandler());
+    console.log(roles);
     
     if (!roles) {
       return true;
@@ -20,6 +21,10 @@ export class AdminGuard implements CanActivate {
     
     const user = request.headers?.role;
     console.log("debug", user);
+    
+    if(user == undefined){
+      return false
+    }
     return this.validateRoles(roles, user);
     
     // return true;
