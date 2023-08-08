@@ -1,7 +1,8 @@
 import { Model } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
 import { User } from 'src/schema/user.schema';
-import { Injectable } from '@nestjs/common';
+import { Types } from 'mongoose';
+import { HttpStatus, Injectable, NotFoundException, BadRequestException } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 
@@ -14,8 +15,24 @@ export class UsersService {
     return createdUser.save();
   }
 
+  async getUserM(id: string) {
+    if (!Types.ObjectId.isValid(id)) {
+      throw new BadRequestException("Invalid ObjectId")
+    }
+      // const user =await this.userModel.find({_id: id});
+      const user =await this.userModel.findById(id);
+      if(!user){
+        throw new NotFoundException();
+      }
+      return user;
+  }
+
   async findAll(): Promise<User[]> {
-    return this.userModel.find().exec();
+    return await this.userModel.find({});
+  }
+
+  async findOne(name: string){
+    return await this.userModel.find({name : "UserC"});
   }
 
   private users = [

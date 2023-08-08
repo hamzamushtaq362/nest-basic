@@ -22,9 +22,14 @@ export class UsersController {
   //     return ['P1', 'P2', {type}];
   //   }
 
+  // @Get()
+  // getUsers(@Query("type") type: 'junior' | 'senior') {
+  //   return this.userService.getUsers(type);
+  // }
+
   @Get()
-  getUsers(@Query("type") type: 'junior' | 'senior') {
-    return this.userService.getUsers(type);
+  getUsers() {
+    return this.userService.findAll();
   }
 
   // @Get(':id')
@@ -36,10 +41,19 @@ export class UsersController {
   //   }
   // }
 
+  // @Get(':id')
+  // getSingleUser(@Param('id', ParseIntPipe) id: number) {
+  //   try{
+  //     return this.userService.getUser(id);
+  //   } catch(err){
+  //     throw new NotFoundException();
+  //   }
+  // }
+
   @Get(':id')
-  getSingleUser(@Param('id', ParseIntPipe) id: number) {
+  getSingleUser(@Param('id') id: string) {
     try{
-      return this.userService.getUser(id);
+      return this.userService.getUserM(id);
     } catch(err){
       throw new NotFoundException();
     }
