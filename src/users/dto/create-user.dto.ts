@@ -5,6 +5,11 @@ export class CreateUserDto {
   @MinLength(3)
   name: string;
 
-  @IsEnum(["junior","senior"], {message: "type must be either junior or senior"})
-  type: "junior" | "senior"
+  // @IsEnum(["junior","senior"], {message: "type must be either junior or senior"})
+  // type: "junior" | "senior"
+  @IsNotEmpty()
+  email: string;
+  
+  @IsNotEmpty()
+  password: string;
 }
